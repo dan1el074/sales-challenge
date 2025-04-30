@@ -13,16 +13,16 @@ import java.time.LocalDate;
 
 public interface SaleRepository extends JpaRepository<Sale, Long> {
     @Query(nativeQuery = true,
-            value = "SELECT tb_sales.id, tb_sales.date, tb_sales.amount ,tb_seller.name AS sellerName " +
-                    "FROM tb_sales " +
-                    "INNER JOIN tb_seller ON tb_sales.seller_id = tb_seller.id " +
-                    "WHERE tb_sales.date BETWEEN :minDate AND :maxDate " +
-                    "AND UPPER(tb_seller.name) LIKE UPPER(CONCAT('%',:sellerName, '%'))",
-            countQuery = "SELECT COUNT(tb_sales.id) " +
-                    "FROM tb_sales " +
-                    "INNER JOIN tb_seller ON tb_sales.seller_id = tb_seller.id " +
-                    "WHERE tb_sales.date BETWEEN :minDate AND :maxDate " +
-                    "AND UPPER(tb_seller.name) LIKE UPPER(CONCAT('%',:sellerName, '%'))")
+            value = "SELECT s1.id, s1.date, s1.amount, s2.name AS sellerName " +
+                    "FROM tb_sales s1 " +
+                    "INNER JOIN tb_seller s2 ON s1.seller_id = s2.id " +
+                    "WHERE s1.date BETWEEN :minDate AND :maxDate " +
+                    "AND UPPER(s2.name) LIKE UPPER(CONCAT('%',:sellerName, '%'))",
+            countQuery = "SELECT COUNT(s1.id) " +
+                    "FROM tb_sales s1 " +
+                    "INNER JOIN tb_seller s2 ON s1.seller_id = s2.id " +
+                    "WHERE s1.date BETWEEN :minDate AND :maxDate " +
+                    "AND UPPER(s2.name) LIKE UPPER(CONCAT('%',:sellerName, '%'))")
     Page<SaleReportProjection> searchSaleReport(LocalDate minDate, LocalDate maxDate, String sellerName, Pageable pageable);
 
     @Query(nativeQuery = true,
